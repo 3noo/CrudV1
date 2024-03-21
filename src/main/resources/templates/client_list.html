@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+<div th:replace="nav.html">
+
+</div>
+
+<div class="container w-75 p-4">
+    <div class="my-3">
+        <form th:action="@{/clients/list}">
+            <div class="row d-flex">
+                <div class="col-md-6 mt-2">
+                    <div class="search d-flex">
+                        <i class="fa fa-search align-self-center mr-2"></i>
+                        <input id="keyword" type="text" name="keyword" th:value="${keyword}" required class="form-control"
+                               placeholder="Enter keyword">
+                    </div>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <button type="submit" class="btn btn-info ">Search</button>
+
+                    <button id="btnClear" class="btn btn-secondary  mr-3">Clear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-hover">
+
+        <thead class="thead-dark">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempClient : ${clientss}">
+            <td th:text="${tempClient.firstName}" />
+            <td th:text="${tempClient.lastName}" />
+            <td th:text="${tempClient.city}" />
+            <td th:text="${tempClient.email}" />
+            <td>
+                <div class="row">
+                    <div class="col-auto">
+                        <!-- Update button -->
+                        <form action="#" th:action="@{/clients/update}" method="POST">
+                            <input type="hidden" name="clientId" th:value="${tempClient.id}" />
+                            <button type="submit" class="btn btn-info btn-sm me-1">Update</button>
+                        </form>
+                    </div>
+                    <div class="col-auto">
+                        <!-- Delete button -->
+                        <form action="#" th:action="@{/clients/delete}" method="POST">
+                            <input type="hidden" name="clientId" th:value="${tempClient.id}" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <footer style="font-size: large" class="panel-footer m-5" th:if="${keyword == null or keyword == ''}">
+                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+                &nbsp; &nbsp; - &nbsp;
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{'/clients/list/page/' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </span>
+                <select id="pageSizeSelect" onchange="changePageSize(this)">
+                    <option value="3" th:selected="${pageSize == 3}">3</option>
+                    <option value="5" th:selected="${pageSize == 5}">5</option>
+                    <option value="10" th:selected="${pageSize == 10}">10</option>
+                    <option value="15" th:selected="${pageSize == 15}">15</option>
+                    <option value="20" th:selected="${pageSize == 20}">20</option>
+                    <option value="30" th:selected="${pageSize == 30}">30</option>
+                </select>
+
+            </footer>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('btnClear').addEventListener('click', function() {
+        document.getElementById('keyword').value = '';
+        document.getElementById('searchForm').action = '/clients/list'; // Set action attribute to /clients/list
+        document.getElementById('searchForm').submit();
+    });
+    $("#btnClear").on("click", function (e) {
+        e.preventDefault();
+        $("#keyword").text("");
+        window.location = "[[@{/clients/list}]]";
+    });
+    function changePageSize(select) {
+        var pageSize = select.value;
+        window.location.href = '/clients/list/page/1?pageSize=' + pageSize;
+    }
+</script>
+</html>
+
