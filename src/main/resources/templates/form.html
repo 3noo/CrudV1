@@ -6,41 +6,203 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title>Add/Edit Client - CrudV1</title>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        .form-container {
+            background-color: var(--white);
+            border-radius: var(--radius-6);
+            box-shadow: var(--shadow-2);
+            padding: 40px;
+            margin-top: 100px;
+        }
+        
+        .form-title {
+            color: var(--oxford-blue-1);
+            font-family: var(--ff-poppins);
+            font-size: var(--fs-3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .form-control {
+            background-color: var(--cultured);
+            border: 2px solid transparent;
+            border-radius: var(--radius-4);
+            padding: 15px 20px 15px 50px;
+            font-size: 1.6rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            background-color: var(--white);
+            border-color: var(--royal-blue-light);
+            box-shadow: 0 0 0 0.2rem var(--flickr-blue_30);
+            outline: none;
+        }
+        
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--sonic-silver);
+            font-size: 2rem;
+            z-index: 1;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn-reset {
+            background-color: var(--sonic-silver);
+            color: var(--white);
+            border: none;
+            padding: 15px 30px;
+            border-radius: var(--radius-4);
+            font-size: var(--fs-7);
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+        
+        .btn-reset:hover {
+            background-color: var(--jet);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 
 <body>
-<div th:replace="nav.html">
-
-</div>
+<div th:replace="nav.html"></div>
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="text-center mb-4 mt-3">Add Client</h2>
-            <hr>
-            <form action="#" th:action="@{/clients/save}" th:object="${clients}" method="POST">
-                <div class="p-3">
+        <div class="col-md-8 col-lg-6">
+            <div class="form-container">
+                <h2 class="form-title">
+                    <ion-icon name="person-add-outline"></ion-icon>
+                    <span th:text="${clients.id == null ? 'Add New Client' : 'Edit Client'}">Add New Client</span>
+                </h2>
+                
+                <form action="#" th:action="@{/clients/save}" th:object="${clients}" method="POST" id="clientForm">
                     <!-- Add hidden form field to handle update -->
                     <input type="hidden" th:field="*{id}" />
-                    <input type="text" th:field="*{firstName}" class="form-control mb-4" placeholder="First name">
-                    <input type="text" th:field="*{lastName}" class="form-control mb-4" placeholder="Last name">
-                    <input type="text" th:field="*{city}" class="form-control mb-4" placeholder="City">
-                    <input type="text" th:field="*{email}" class="form-control mb-4" placeholder="Email">
-                    <div class="text-center">
-                        <input type="reset" class="btn btn-secondary" value="Reset">
-                        <input type="submit" class="btn btn-primary bg-info" value="Submit">
+                    
+                    <div class="form-group">
+                        <ion-icon name="person-outline" class="form-icon"></ion-icon>
+                        <input type="text" 
+                               th:field="*{firstName}" 
+                               class="form-control" 
+                               placeholder="First Name"
+                               required
+                               minlength="2"
+                               maxlength="50">
                     </div>
-                </div>
-            </form>
+                    
+                    <div class="form-group">
+                        <ion-icon name="person-outline" class="form-icon"></ion-icon>
+                        <input type="text" 
+                               th:field="*{lastName}" 
+                               class="form-control" 
+                               placeholder="Last Name"
+                               required
+                               minlength="2"
+                               maxlength="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <ion-icon name="location-outline" class="form-icon"></ion-icon>
+                        <input type="text" 
+                               th:field="*{city}" 
+                               class="form-control" 
+                               placeholder="City"
+                               required
+                               minlength="2"
+                               maxlength="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <ion-icon name="mail-outline" class="form-icon"></ion-icon>
+                        <input type="email" 
+                               th:field="*{email}" 
+                               class="form-control" 
+                               placeholder="Email Address"
+                               required
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    </div>
+                    
+                    <div class="btn-container">
+                        <button type="reset" class="btn-reset">
+                            <ion-icon name="refresh-outline"></ion-icon>
+                            Reset
+                        </button>
+                        <button type="submit" class="btn">
+                            <ion-icon name="checkmark-outline"></ion-icon>
+                            <span th:text="${clients.id == null ? 'Add Client' : 'Update Client'}">Submit</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Custom JavaScript -->
+<script th:src="@{/assets/js/script.js}"></script>
+
+<script>
+    // Form validation feedback
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+        const form = e.target;
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+    
+    // Real-time validation feedback
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.checkValidity()) {
+                this.style.borderColor = 'var(--carolina-blue)';
+            } else {
+                this.style.borderColor = '#dc3545';
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.style.borderColor === '#dc3545' && this.checkValidity()) {
+                this.style.borderColor = 'var(--carolina-blue)';
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

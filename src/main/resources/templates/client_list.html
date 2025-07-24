@@ -6,124 +6,385 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title>Client List - CrudV1</title>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
           integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family:400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        .list-container {
+            margin-top: 100px;
+            padding: 30px;
+            background-color: var(--white);
+            border-radius: var(--radius-6);
+            box-shadow: var(--shadow-2);
+        }
+        
+        .list-title {
+            color: var(--oxford-blue-1);
+            font-family: var(--ff-poppins);
+            font-size: var(--fs-3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .search-container {
+            background-color: var(--cultured);
+            padding: 20px;
+            border-radius: var(--radius-6);
+            margin-bottom: 30px;
+        }
+        
+        .search-input {
+            background-color: var(--white);
+            border: 2px solid transparent;
+            border-radius: var(--radius-4);
+            padding: 12px 20px 12px 45px;
+            font-size: 1.6rem;
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            border-color: var(--royal-blue-light);
+            box-shadow: 0 0 0 0.2rem var(--flickr-blue_30);
+            outline: none;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--sonic-silver);
+        }
+        
+        .table-responsive {
+            border-radius: var(--radius-6);
+            overflow: hidden;
+            box-shadow: var(--shadow-1);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background-image: var(--gradient);
+            color: var(--white);
+            border: none;
+            padding: 20px 15px;
+            font-weight: var(--fw-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--lavender-web);
+            transform: scale(1.01);
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-top: 1px solid var(--gainsboro_50);
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: var(--radius-4);
+            font-size: 1.3rem;
+            font-weight: var(--fw-500);
+            text-transform: uppercase;
+            transition: var(--transition);
+            margin-right: 5px;
+        }
+        
+        .btn-update {
+            background-color: var(--carolina-blue);
+            color: var(--white);
+        }
+        
+        .btn-update:hover {
+            background-color: var(--royal-blue-light);
+            transform: translateY(-2px);
+            color: var(--white);
+        }
+        
+        .btn-delete {
+            background-color: #dc3545;
+            color: var(--white);
+        }
+        
+        .btn-delete:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            color: var(--white);
+        }
+        
+        .pagination-container {
+            background-color: var(--cultured);
+            padding: 20px;
+            border-radius: var(--radius-6);
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .pagination-info {
+            color: var(--oxford-blue-1);
+            font-family: var(--ff-poppins);
+            font-weight: var(--fw-500);
+            margin-bottom: 15px;
+        }
+        
+        .pagination-links a {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 2px;
+            background-color: var(--white);
+            color: var(--oxford-blue-1);
+            text-decoration: none;
+            border-radius: var(--radius-4);
+            transition: var(--transition);
+        }
+        
+        .pagination-links a:hover {
+            background-image: var(--gradient);
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .page-size-select {
+            background-color: var(--white);
+            border: 2px solid var(--royal-blue-light);
+            border-radius: var(--radius-4);
+            padding: 8px 12px;
+            margin-left: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--sonic-silver);
+        }
+        
+        .empty-state ion-icon {
+            font-size: 6rem;
+            color: var(--light-steel-blue);
+            margin-bottom: 20px;
+        }
+        
+        .btn-reset {
+            background-color: var(--sonic-silver);
+            color: var(--white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--radius-4);
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-reset:hover {
+            background-color: var(--jet);
+            transform: translateY(-2px);
+            color: var(--white);
+        }
+        
+        .current-page {
+            background-image: var(--gradient) !important;
+            color: var(--white) !important;
+        }
+    </style>
 </head>
 
 <body>
-<div th:replace="nav.html">
+<div th:replace="nav.html"></div>
 
-</div>
-
-<div class="container w-75 p-4">
-    <div class="my-3">
-        <form th:action="@{/clients/list}">
-            <div class="row d-flex">
-                <div class="col-md-6 mt-2">
-                    <div class="search d-flex">
-                        <i class="fa fa-search align-self-center mr-2"></i>
-                        <input id="keyword" type="text" name="keyword" th:value="${keyword}" required class="form-control"
-                               placeholder="Enter keyword">
-                    </div>
-                </div>
-                <div class="col-md-6 mt-2">
-                    <button type="submit" class="btn btn-info ">Search</button>
-
-                    <button id="btnClear" class="btn btn-secondary  mr-3">Clear</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <table class="table table-hover">
-
-        <thead class="thead-dark">
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th>Email</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="tempClient : ${clientss}">
-            <td th:text="${tempClient.firstName}" />
-            <td th:text="${tempClient.lastName}" />
-            <td th:text="${tempClient.city}" />
-            <td th:text="${tempClient.email}" />
-            <td>
-                <div class="row">
-                    <div class="col-auto">
-                        <!-- Update button -->
-                        <form action="#" th:action="@{/clients/update}" method="POST">
-                            <input type="hidden" name="clientId" th:value="${tempClient.id}" />
-                            <button type="submit" class="btn btn-info btn-sm me-1">Update</button>
-                        </form>
-                    </div>
-                    <div class="col-auto">
-                        <!-- Delete button -->
-                        <form action="#" th:action="@{/clients/delete}" method="POST">
-                            <input type="hidden" name="clientId" th:value="${tempClient.id}" />
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-</div>
-
-</body>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <footer style="font-size: large" class="panel-footer m-5" th:if="${keyword == null or keyword == ''}">
-                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
-                &nbsp; &nbsp; - &nbsp;
-                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{'/clients/list/page/' + ${i}}">[[${i}]]</a>
-        &nbsp; &nbsp;
-    </span>
-                <select id="pageSizeSelect" onchange="changePageSize(this)">
-                    <option value="3" th:selected="${pageSize == 3}">3</option>
-                    <option value="5" th:selected="${pageSize == 5}">5</option>
-                    <option value="10" th:selected="${pageSize == 10}">10</option>
-                    <option value="15" th:selected="${pageSize == 15}">15</option>
-                    <option value="20" th:selected="${pageSize == 20}">20</option>
-                    <option value="30" th:selected="${pageSize == 30}">30</option>
-                </select>
+    <div class="list-container">
+        <h2 class="list-title">
+            <ion-icon name="people-outline"></ion-icon>
+            Client Management
+        </h2>
+        
+        <!-- Search Section -->
+        <div class="search-container">
+            <form th:action="@{/clients/list}" id="searchForm">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="position-relative">
+                            <i class="fa fa-search search-icon"></i>
+                            <input id="keyword" 
+                                   type="text" 
+                                   name="keyword" 
+                                   th:value="${keyword}" 
+                                   class="form-control search-input"
+                                   placeholder="Search by name, email, or city...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn mr-2">
+                            <ion-icon name="search-outline"></ion-icon>
+                            Search
+                        </button>
+                        <button id="btnClear" type="button" class="btn-reset action-btn">
+                            <ion-icon name="refresh-outline"></ion-icon>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-            </footer>
-
+        <!-- Table Section -->
+        <div class="table-responsive" th:if="${not #lists.isEmpty(clientss)}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><ion-icon name="person-outline"></ion-icon> First Name</th>
+                        <th><ion-icon name="person-outline"></ion-icon> Last Name</th>
+                        <th><ion-icon name="location-outline"></ion-icon> City</th>
+                        <th><ion-icon name="mail-outline"></ion-icon> Email</th>
+                        <th><ion-icon name="settings-outline"></ion-icon> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tempClient : ${clientss}">
+                        <td th:text="${tempClient.firstName}">John</td>
+                        <td th:text="${tempClient.lastName}">Doe</td>
+                        <td th:text="${tempClient.city}">New York</td>
+                        <td th:text="${tempClient.email}">john@example.com</td>
+                        <td>
+                            <form style="display: inline;" th:action="@{/clients/update}" method="POST">
+                                <input type="hidden" name="clientId" th:value="${tempClient.id}" />
+                                <button type="submit" class="action-btn btn-update">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                    Update
+                                </button>
+                            </form>
+                            <form style="display: inline;" th:action="@{/clients/delete}" method="POST" class="delete-form">
+                                <input type="hidden" name="clientId" th:value="${tempClient.id}" />
+                                <button type="button" class="action-btn btn-delete delete-btn" 
+                                        th:data-name="${tempClient.firstName + ' ' + tempClient.lastName}">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state" th:if="${#lists.isEmpty(clientss)}">
+            <ion-icon name="people-outline"></ion-icon>
+            <h3>No Clients Found</h3>
+            <p th:if="${keyword != null and keyword != ''}">
+                No clients match your search criteria for "<span th:text="${keyword}"></span>"
+            </p>
+            <p th:if="${keyword == null or keyword == ''}">
+                You haven't added any clients yet. Start by adding your first client!
+            </p>
+            <a th:href="@{/clients/add}" class="btn">
+                <ion-icon name="add-outline"></ion-icon>
+                Add First Client
+            </a>
         </div>
     </div>
 </div>
 
+<!-- Pagination -->
+<div class="container" th:if="${keyword == null or keyword == ''} and ${not #lists.isEmpty(clientss)}">
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Total Items: <strong>[[${totalItems}]]</strong> | 
+            Page <strong>[[${currentPage}]]</strong> of <strong>[[${totalPages}]]</strong>
+        </div>
+        
+        <div class="pagination-links">
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{'/clients/list/page/' + ${i} + '?pageSize=' + ${pageSize}}" 
+                   th:class="${i == currentPage} ? 'current-page' : ''"
+                   th:text="${i}">1</a>
+            </span>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <label for="pageSizeSelect">Items per page:</label>
+            <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this)">
+                <option value="3" th:selected="${pageSize == 3}">3</option>
+                <option value="5" th:selected="${pageSize == 5}">5</option>
+                <option value="10" th:selected="${pageSize == 10}">10</option>
+                <option value="15" th:selected="${pageSize == 15}">15</option>
+                <option value="20" th:selected="${pageSize == 20}">20</option>
+                <option value="30" th:selected="${pageSize == 30}">30</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Custom JavaScript -->
+<script th:src="@{/assets/js/script.js}"></script>
 
 <script>
+    // Clear search functionality
     document.getElementById('btnClear').addEventListener('click', function() {
         document.getElementById('keyword').value = '';
-        document.getElementById('searchForm').action = '/clients/list'; // Set action attribute to /clients/list
-        document.getElementById('searchForm').submit();
+        window.location.href = '/clients/list';
     });
-    $("#btnClear").on("click", function (e) {
-        e.preventDefault();
-        $("#keyword").text("");
-        window.location = "[[@{/clients/list}]]";
-    });
+    
+    // Page size change functionality
     function changePageSize(select) {
         var pageSize = select.value;
         window.location.href = '/clients/list/page/1?pageSize=' + pageSize;
     }
+    
+    // Delete confirmation
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const clientName = this.getAttribute('data-name');
+            if (confirm(`Are you sure you want to delete client "${clientName}"? This action cannot be undone.`)) {
+                this.closest('.delete-form').submit();
+            }
+        });
+    });
+    
+    // Search form enhancement
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        const keyword = document.getElementById('keyword').value.trim();
+        if (keyword === '') {
+            window.location.href = '/clients/list';
+            e.preventDefault();
+        }
+    });
 </script>
+
+</body>
 </html>
 
